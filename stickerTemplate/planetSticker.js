@@ -23,8 +23,8 @@ let saturnBool = false;
 //some lists or arrays or however the fuck they're made in JavaScript
 let mX = [];
 let mY = [];
-let satX = [];
-let satY = [];
+let sX = [];
+let sY = [];
 
 //my buttons
 let debugMode = false;
@@ -50,29 +50,50 @@ function draw(){
     background(stars);
   pop();
 
+  for(let i = 0; i < mX.length; i++){
+    image(mars, mX[i], mY[i], 120, 100);
+  }
+  for(let i = 0; i < sX.length; i++){
+    image(saturn, sX[i], sY[i], 140, 100);
+  }
   image(marsButton, marsButtonX, marsButtonY, 50,50);
   image(saturnButton, saturnButtonX, saturnButtonY, 60, 50);
+  if(debugMode){
+    print("Current Mouse Pos: " + mouseX + ", " + mouseY);
+  }
 }
 
-function distance(){
+function mousePressed(){
   if(dist(mouseX, mouseY, marsButtonX, marsButtonY) < 25){
     marsBool = true;
     saturnBool = false;
+    print(marsBool);
   }
   if(dist(mouseX, mouseY, saturnButtonX, saturnButtonY) < 25){
     marsBool = false;
     saturnBool = true;
+    print(saturnBool);
   }
   if(marsBool == true){
     if(mouseX > 200 || mouseY > 200){
-      msX.push(mouseX);
-      msY.push(mouseY);
+      mX.push(mouseX);
+      mY.push(mouseY);
+      if(debugMode){
+        print(mX.length);
+        print(mX[0]);
+        print(mY[0]);
+      }
     }
   }
   if(saturnBool == true){
     if(mouseX > 200 || mouseY > 200){
-      satX.push(mouseX);
-      satY.push(mouseY);
+      sX.push(mouseX);
+      sY.push(mouseY);
+      if(debugMode){
+        print(sX.length);
+        print(sX[0]);
+        print(sY[0]);
+      }
     }
   }
 
@@ -80,19 +101,22 @@ function distance(){
 
 
 function keyTyped(){
-  if(key === 'd' && debugMode == false){
-    debugMode = true;
+  if(key === 'd'){
+    if(debugMode == false){
+      debugMode = true;
+    }
+    else{
+      debugMode = false;
+    }
   }
-  else if(key === 'd' && debugMode == true){
-    debugMode = false;
+  if(key == 'x'){
+    mX.splice[0, mX.length];
+    mY = [];
+    sX = [];
+    sY = [];
   }
 }
 
-
-function mousePressed(){
-
-
-}
 
 
 function windowResized(){

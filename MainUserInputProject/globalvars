@@ -1,0 +1,20 @@
+//all my global variables cuz they look ugly
+var ship;
+var planet;
+var canvas;
+var sceneIndex;
+var sceneArray = [];
+var hyperspaceButton;
+var debugMode = false;
+var inHyperspace = false;
+var starX = [];
+var starY = [];
+var starX2 = [];
+var starY2 = [];
+var xMove = 10;
+var yMove = 0;
+var starXPos;
+var starYPos;
+var hsSetUpDone = false;
+var timeoutLimit;
+var resetHyperSpace = false;

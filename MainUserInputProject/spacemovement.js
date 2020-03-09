@@ -11,13 +11,23 @@
   let pressedContinue;
   let changeText = 0;
   let hyperSpaceReady = false;
+  let plutoMenu;
+  let choice;
+  let aggressive = false;
+  let practical = false;
+  let friendly = false;
 
 function preload(){
   spaceMusic = loadSound("audio/spacealt1.mp3");
   sceneArray.push(loadImage("images/8bitSpace0.png"));
   sceneArray.push(loadImage("images/8bit_earth1.png"));
+  sceneArray.push(loadImage("images/8bit_pluto_2.png"));
   sceneArray.push(loadImage("images/8bit_galaxyOne_2.png"))
-  sceneArray.push(loadImage("images/8bit_pluto_2.png"))
+  sceneArray.push(loadImage("images/8bit_spaceRand1.png"));
+  sceneArray.push(loadImage("images/8bitufoSpace.png"));
+  sceneArray.push(loadImage("images/8bit_spaceCorp.png"));
+
+
   ship = loadImage("images/bitShip1.png");
 
 
@@ -36,20 +46,30 @@ function setup(){
 }
 
 function draw(){
-  if(sceneNum == 0){
-    intro();
-  }
-  else if(sceneNum == 1){
-    startPluto();
-  }
-
-  //  image(ship, 200, 200, 50, 50);
-
-  else if(inHyperspace == true && hyperSpaceReady == true){
+  if(inHyperspace == true && hyperSpaceReady == true){
   //  let someStar = new SpaceStar(100, 100, )
     canvas.background(9,9,9);
     hyperspaceMode();
   }
+  else if(sceneNum == 0){
+    intro();
+  }
+  else if(sceneNum == 1){
+    leavingEarth();
+  }
+  else if(sceneNum == 2){
+    startPluto();
+  }
+  else if(sceneNum == 3){
+    toGalaxy();
+  }
+  else if(sceneNum == 4){
+
+  }
+
+  //  image(ship, 200, 200, 50, 50);
+
+
 }
 
 function intro(){
@@ -86,24 +106,109 @@ function intro(){
     fill(255);
   }
   else{
-    sceneNum++;
-    sceneIndex++;
-    changeText = 0;
+    changeScene();
   }
 
 }
 
+function leavingEarth(){
+  spaceMusic.loop();
+  canvas.background(sceneArray[sceneIndex]);
+  image(ship, 200, 200, 50, 50);
+  if(changeText == 0){
+    textSize(30);
+    text("Your ship is a simple one... but enough supplies\n for a few lightyears of travel", 100, 100);
+    fill(255);
+  }
+  else{
+    changeScene();
+  }
+
+}
 function startPluto(){
   spaceMusic.loop();
-  sceneIndex = 0;
+  var menuMade = false;
   canvas.background(sceneArray[sceneIndex]);
+  image(ship, 50, 300, 50, 50);
   if(changeText == 0){
     textSize(30);
     text("Here at the Pluto Depot, you can stock up before your journey...", 100, 100);
     fill(255);
+    if(menuMade == false){
+      createMenu();
+    }
+
+
+  }
+  else if(changeText == 1){
+    textSize(30);
+    text("Select from the menu... click continue when done", 100, 100);
+    fill(255);
+
+  }
+  else{
+    choice = plutoMenu.value();
+    if(choice == 'Buy mostly food and supples...'){
+      friendly = true;
+    }
+    else if(choice == "Buy arms and defense mods...."){
+      aggressive = true;
+    }
+    else if(choice == "Buy spare parts for the ship...."){
+      practical = true;
+    }
+    changeScene();
   }
 }
 
+
+function createMenu(){
+  plutoMenu = createSelect();
+  plutoMenu.style("z-index", "1");
+  plutoMenu.position(windowWidth/2, 200);
+  plutoMenu.option("Buy mostly food and supples...");
+  plutoMenu.option("Buy arms and defense mods....");
+  plutoMenu.option("Buy spare parts for the ship....");
+  menuMade = true;
+}
+
+
+function toGalaxy(){
+//  spaceMusic = loadSound("audio/space2.mp3");
+
+  canvas.background(sceneArray[sceneIndex]);
+  if(changeText == 0){
+    plutoMenu.hide();
+    textSize(30);
+    text("So your jounrey begins... \n a lot of places to choose from... but for now", 100, 100);
+    text("Eyes are set on the Perses Arm of the galaxy", 100, 200);
+    fill(255);
+  }
+  else if(changeText == 1){
+    hyperSpaceReady = true;
+    textSize(30);
+    text("Ready to jump to hyperspace!", 100, 100);
+    text("Click on the 'Jump to FTL' button when ready!", 100, 200);
+    fill(255);
+  }
+}
+
+function encounter1(){
+  canvas.background(sceneArray[sceneIndex]);
+  if(changeText == 0){
+    textSize(30);
+    text("You arrive at a nearby outpost", 100, 100);
+    text("You see another ship nearby...", 100, 200);
+    fill(255);
+  }
+  else if(changeText == 1){
+    textSize(30);
+    text("So your jounrey begins... \n a lot of places to choose from... but for now", 100, 100);
+    text("Eyes are set on the Perses Arm of the galaxy", 100, 200);
+    fill(255);
+  }
+
+}
 function hyperspaceMode(){
   if(hsSetUpDone == false){
     //print("Setting up. ONLY RUN ONCE!!!");
@@ -112,7 +217,6 @@ function hyperspaceMode(){
     hsSetUpDone = true;
   }
   else{
-
     hyperspace();
   }
 }
@@ -132,6 +236,11 @@ function hyperspace(){
     starArray[i].movethis(-10);
     starArray[i].star();
   }
+  if(starArray[14].x < 0){
+    inHyperspace = false;
+    hyperSpaceReady = false;
+    changeScene();
+  }
 
 }
 
@@ -150,7 +259,12 @@ function keyTyped(){
 
 
 function toggleHyperspace(){
-  if(inHyperspace == false){
+  if(hyperSpaceReady == false){
+    textSize(40);
+    text("ERROR: Engines Not Prepped for Hyperspace...")
+    fill(255);
+  }
+  else if(hyperSpaceReady == true && inHyperspace == false){
     inHyperspace = true;
   }
 }
@@ -163,4 +277,10 @@ function toggleTextContinue(){
 function windowResized(){
   createCanvas(windowWidth, windowHeight);
   canvas.background(sceneArray[sceneIndex]);
+}
+
+function changeScene(){
+  sceneNum++;
+  sceneIndex++;
+  changeText = 0;
 }

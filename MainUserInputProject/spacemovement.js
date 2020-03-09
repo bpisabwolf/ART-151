@@ -4,15 +4,28 @@
 //different alien races
 
 //variables for images
+  let sceneNum=0;
   let starArray = [];
+  let spaceMusic;
+  let textMoveButton;
+  let pressedContinue;
+  let changeText = 0;
+  let hyperSpaceReady = false;
 
 function preload(){
+  spaceMusic = loadSound("audio/spacealt1.mp3");
+  sceneArray.push(loadImage("images/8bitSpace0.png"));
   sceneArray.push(loadImage("images/8bit_earth1.png"));
+  sceneArray.push(loadImage("images/8bit_galaxyOne_2.png"))
+  sceneArray.push(loadImage("images/8bit_pluto_2.png"))
   ship = loadImage("images/bitShip1.png");
 
 
   hyperspaceButton = createButton("Jump to FTL");
   hyperspaceButton.mousePressed(toggleHyperspace);
+
+  textMoveButton = createButton("Continue");
+  textMoveButton.mousePressed(toggleTextContinue);
 
 }
 
@@ -23,14 +36,71 @@ function setup(){
 }
 
 function draw(){
-  if(inHyperspace == false){
-    rotate(PI);
-    image(ship, 200, 200, 50, 50);
+  if(sceneNum == 0){
+    intro();
   }
-  else{
+  else if(sceneNum == 1){
+    startPluto();
+  }
+
+  //  image(ship, 200, 200, 50, 50);
+
+  else if(inHyperspace == true && hyperSpaceReady == true){
   //  let someStar = new SpaceStar(100, 100, )
     canvas.background(9,9,9);
     hyperspaceMode();
+  }
+}
+
+function intro(){
+  spaceMusic.loop();
+  sceneIndex = 0;
+  canvas.background(sceneArray[sceneIndex]);
+  if(changeText == 0){
+    textSize(30);
+    text("In the year 2134, 30 years after humanity's first venture beyond the Solar System...", 100, 100);
+    text("The development and mass production of hyperspace has allowed many upstanding \ncivilians to venture into the new universe", 100, 200);
+    fill(255);
+  }
+  else if(changeText == 1){
+    textSize(30);
+    text("But.. what was thought to be a new age of exploration...", 100, 100);
+    text("turned into various global corporations quickly claiming regions of space for themselves...", 100, 200);
+    fill(255);
+  }
+  else if(changeText == 2){
+    textSize(30);
+    text("Despite this, many common folk have siezed the opportunity to venture out to the unexplored galaxy...", 100, 100);
+    text("Many troubles await ahead... natural dangers, new alien species, and even our\n fellow man making sure their property is protected....", 100, 200);
+    fill(255);
+  }
+  else if(changeText == 3){
+    textSize(30);
+    text("You and 3 others are aboard your new ship, which cost your entire life savings... The Resilience", 100, 100);
+    text("You head for the Pluto Depot to stock up before you begin your journey to \nsettle somewhere anew in the galaxy", 100, 200);
+    fill(255);
+  }
+  else if(changeText == 4){
+    textSize(50);
+    text("Welcome to... the Milky Way Trail", 400, 300);
+    fill(255);
+  }
+  else{
+    sceneNum++;
+    sceneIndex++;
+    changeText = 0;
+  }
+
+}
+
+function startPluto(){
+  spaceMusic.loop();
+  sceneIndex = 0;
+  canvas.background(sceneArray[sceneIndex]);
+  if(changeText == 0){
+    textSize(30);
+    text("Here at the Pluto Depot, you can stock up before your journey...", 100, 100);
+    fill(255);
   }
 }
 
@@ -83,6 +153,11 @@ function toggleHyperspace(){
   if(inHyperspace == false){
     inHyperspace = true;
   }
+}
+
+function toggleTextContinue(){
+  canvas.background(sceneArray[sceneIndex]);
+  changeText++;
 }
 
 function windowResized(){

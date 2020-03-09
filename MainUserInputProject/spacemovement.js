@@ -16,6 +16,7 @@
   let aggressive = false;
   let practical = false;
   let friendly = false;
+  let eMenu;
 
 function preload(){
   spaceMusic = loadSound("audio/spacealt1.mp3");
@@ -77,6 +78,7 @@ function draw(){
 function shortEnding(){
   canvas.background(sceneArray[sceneIndex]);
   if(changeText == 0){
+    eMenu.hide();
     textSize(30);
     text("You arrive to a newly colonized planet..", 100, 100);
     text("Alien ships nearby raise concern \n They normally avoid human contact..", 100, 200);
@@ -203,7 +205,7 @@ function toGalaxy(){
 }
 
 function encounter1(){
-  let eMenu;
+
   canvas.background(sceneArray[sceneIndex]);
   if(changeText == 0){
     textSize(30);
@@ -249,12 +251,20 @@ function encounter1(){
       text("With this we can probably sell some of our old parts for some food \n thanks!", 100, 100);
       fill(255);
     }
+    else{
+        textSize(30);
+        text("Umm.. I think we'd rather deal with someone esle...", 100, 100);
+        fill(255);
+
+    }
   }
   else{
-    hyperSpaceReady = true;
+
     textSize(30);
     text("Ship is ready for hyperspace\n Click button when ready", 100, 100);
     fill(255);
+    hyperSpaceReady = true;
+    hyperSpaceSetUp = false;
   }
 
 }

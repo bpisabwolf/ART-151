@@ -37,6 +37,7 @@ function hyperspaceMode(){
     hsSetUpDone = true;
   }
   else{
+    canvas.background(9,9,9);
     hyperspace();
   }
 }

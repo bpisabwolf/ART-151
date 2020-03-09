@@ -17,6 +17,7 @@
   let practical = false;
   let friendly = false;
   let eMenu;
+  let musLooped = false;
 
 function preload(){
   spaceMusic = loadSound("audio/spacealt1.mp3");
@@ -89,9 +90,11 @@ function shortEnding(){
 }
 
 function intro(){
-  spaceMusic.loop();
+
+
   sceneIndex = 0;
   canvas.background(sceneArray[sceneIndex]);
+  spaceMusic.loop();
   if(changeText == 0){
     textSize(30);
     text("In the year 2134, 30 years after humanity's first venture beyond the Solar System...", 100, 100);

@@ -2,7 +2,7 @@
 var ship;
 var planet;
 var canvas;
-var sceneIndex;
+var sceneIndex = 0;
 var sceneArray = [];
 var hyperspaceButton;
 var debugMode = false;
@@ -11,6 +11,7 @@ var starX = [];
 var starY = [];
 var starX2 = [];
 var starY2 = [];
+var stars = [];
 var xMove = 10;
 var yMove = 0;
 var starXPos;

@@ -24,8 +24,9 @@ function preload(){
   sceneArray.push(loadImage("images/8bit_pluto_2.png"));
   sceneArray.push(loadImage("images/8bit_galaxyOne_2.png"))
   sceneArray.push(loadImage("images/8bit_spaceRand1.png"));
-  sceneArray.push(loadImage("images/8bitufoSpace.png"));
-  sceneArray.push(loadImage("images/8bit_spaceCorp.png"));
+  sceneArray.push(loadImage("images/8bit_spaceRand2.png"));
+//  sceneArray.push(loadImage("images/8bitufoSpace.png"));
+//  sceneArray.push(loadImage("images/8bit_spaceCorp.png"));
 
 
   ship = loadImage("images/bitShip1.png");
@@ -64,12 +65,25 @@ function draw(){
     toGalaxy();
   }
   else if(sceneNum == 4){
-
+    encounter1();
+  }
+  else if(sceneNum == 5){
+    shortEnding();
   }
 
   //  image(ship, 200, 200, 50, 50);
+}
 
+function shortEnding(){
+  canvas.background(sceneArray[sceneIndex]);
+  if(changeText == 0){
+    textSize(30);
+    text("You arrive to a newly colonized planet..", 100, 100);
+    text("Alien ships nearby raise concern \n They normally avoid human contact..", 100, 200);
+    text("Soon we might have to interact with the aliens, obviously enraged that \n Earthlings are colonizing so quickly...", 100, 350);
 
+    fill(255);
+  }
 }
 
 function intro(){
@@ -134,8 +148,13 @@ function startPluto(){
     textSize(30);
     text("Here at the Pluto Depot, you can stock up before your journey...", 100, 100);
     fill(255);
-    if(menuMade == false){
-      createMenu();
+    if(!plutoMenu){
+      plutoMenu = createSelect();
+      plutoMenu.style("z-index", "1");
+      plutoMenu.position(windowWidth/2, 200);
+      plutoMenu.option("Buy mostly food and supples...");
+      plutoMenu.option("Buy arms and defense mods....");
+      plutoMenu.option("Buy spare parts for the ship....");
     }
 
 
@@ -162,16 +181,6 @@ function startPluto(){
 }
 
 
-function createMenu(){
-  plutoMenu = createSelect();
-  plutoMenu.style("z-index", "1");
-  plutoMenu.position(windowWidth/2, 200);
-  plutoMenu.option("Buy mostly food and supples...");
-  plutoMenu.option("Buy arms and defense mods....");
-  plutoMenu.option("Buy spare parts for the ship....");
-  menuMade = true;
-}
-
 
 function toGalaxy(){
 //  spaceMusic = loadSound("audio/space2.mp3");
@@ -194,6 +203,7 @@ function toGalaxy(){
 }
 
 function encounter1(){
+  let eMenu;
   canvas.background(sceneArray[sceneIndex]);
   if(changeText == 0){
     textSize(30);
@@ -203,8 +213,47 @@ function encounter1(){
   }
   else if(changeText == 1){
     textSize(30);
-    text("So your jounrey begins... \n a lot of places to choose from... but for now", 100, 100);
-    text("Eyes are set on the Perses Arm of the galaxy", 100, 200);
+    text("A transmission comes through: ", 100, 100);
+    text("Orion Corp has taken our supples, said its a 'tax'...", 100, 200);
+    text("We could use some supplies...", 100, 300);
+    fill(255);
+    if(!eMenu){
+      eMenu = createSelect();
+      eMenu.style("z-index", "1");
+      eMenu.position(windowWidth/2, 200);
+      eMenu.option("Give supplies...");
+      eMenu.option("Give weapons...");
+      eMenu.option("Give repair equipment...");
+    }
+
+  }
+  else if(changeText == 2){
+    textSize(30);
+    text("You decide to", 100, 100);
+    fill(255);
+  }
+  else if(changeText == 3){
+    choice = eMenu.value();
+    if(choice == 'Give supplies...' && friendly == true){
+      textSize(30);
+      text("Thank you for the supplies!", 100, 100);
+      fill(255);
+    }
+    else if(choice == "Give weapons..." && aggressive == true){
+      textSize(30);
+      text("We can probably go hunting for food on some planet with this \n thanks!", 100, 100);
+      fill(255);
+    }
+    else if(choice == 'Give repair equipment...' && practical){
+      textSize(30);
+      text("With this we can probably sell some of our old parts for some food \n thanks!", 100, 100);
+      fill(255);
+    }
+  }
+  else{
+    hyperSpaceReady = true;
+    textSize(30);
+    text("Ship is ready for hyperspace\n Click button when ready", 100, 100);
     fill(255);
   }
 

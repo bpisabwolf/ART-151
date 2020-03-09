@@ -5,7 +5,7 @@ var canvas;
 var sceneIndex = 0;
 var sceneArray = [];
 var hyperspaceButton;
-var debugMode = false;
+var debugging = false;
 var inHyperspace = false;
 var starX = [];
 var starY = [];

@@ -8,7 +8,8 @@
 
 function preload(){
   sceneArray.push(loadImage("images/8bit_earth1.png"));
-  ship = loadImage("images/ship1.png");
+  ship = loadImage("images/bitShip1.png");
+
 
   hyperspaceButton = createButton("Jump to FTL");
   hyperspaceButton.mousePressed(toggleHyperspace);
@@ -23,21 +24,25 @@ function setup(){
 
 function draw(){
   if(inHyperspace == false){
+    rotate(PI);
     image(ship, 200, 200, 50, 50);
   }
   else{
-    hyperspace();
+  //  let someStar = new SpaceStar(100, 100, )
+    canvas.background(9,9,9);
+    hyperspaceMode();
   }
 }
 
 function hyperspaceMode(){
-  if(hsSetUpDone = false){
+  if(hsSetUpDone == false){
     //print("Setting up. ONLY RUN ONCE!!!");
     hyperSpaceSetUp();
+    print("Should get here");
     hsSetUpDone = true;
   }
   else{
-    canvas.background(9,9,9);
+
     hyperspace();
   }
 }
@@ -45,7 +50,7 @@ function hyperspaceMode(){
 function hyperSpaceSetUp(){
   for(let j = 0; j < 15; j++)
   {
-    starArray.push(new star(random(windowWidth/2, windowWidth-50), random(windowHeight/2, windowHeight - 50), 300, 10, 70, 4);
+    starArray.push(new SpaceStar(random(windowWidth/2, windowWidth-50), random(windowHeight - 50), 10, 30, 4));
     starArray[j].star();
   }
 }
@@ -54,7 +59,7 @@ function hyperSpaceSetUp(){
 function hyperspace(){
   image(ship, width/2, height/2, 50, 50);
   for(let i = 0; i < 15; i++){
-    starArray[i].movethis();
+    starArray[i].movethis(-10);
     starArray[i].star();
   }
 
@@ -62,13 +67,13 @@ function hyperspace(){
 
 function keyTyped(){
   if(key === 'd'){
-    if(debugMode == false)
+    if(debugging == false)
     {
-      debugMode = true;
+      debugging = true;
     }
     else
     {
-      debugMode = false;
+      debugging = false;
     }
   }
 }

@@ -8,7 +8,7 @@ class SpaceStar{
     this.npoints = numPoints;
   }
 
-  movethis(){
+  movethis(xChange){
     this.x = this.x + xChange;
   }
 

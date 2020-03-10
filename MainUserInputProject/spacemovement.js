@@ -78,6 +78,7 @@ function draw(){
 
 function shortEnding(){
   canvas.background(sceneArray[sceneIndex]);
+
   if(changeText == 0){
     eMenu.hide();
     textSize(30);
@@ -94,7 +95,12 @@ function intro(){
 
   sceneIndex = 0;
   canvas.background(sceneArray[sceneIndex]);
+//  if(musLooped == false){
+
+//    musLooped = true;
+//  }
   spaceMusic.loop();
+
   if(changeText == 0){
     textSize(30);
     text("In the year 2134, 30 years after humanity's first venture beyond the Solar System...", 100, 100);

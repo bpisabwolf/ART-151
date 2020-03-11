@@ -22,6 +22,12 @@
   </head>
   <body>
     <a-scene>
+      <a-assets>
+        <img id="skyTexture" src="images/starmap.jpg">
+        <img id="io" src="images/io.jpg">
+        <video id="city" autoplay loop="true" src="video/city.mp4"></video>
+        <video id="mountain" autoplay loop="true" src="video/mountain.mp4"></video>
+      </a-assets>
       <a-entity
         geometry="primitive: box; width: 1; height: 1; depth: 5;"
         radius = "1;"
@@ -58,6 +64,9 @@
         material = "color:#33aa66">
       </a-entity>
       <a-entity ocean="" rotation="-90 -1.28 0" position="0.07 1 -2.22"></a-entity>
+      <!-- <a-sky src = "io"></a-sky> -->
+      <!-- <a-video src="#mountain" width="16" height="9" position="0 4 -10"></a-video> -->
+      <a-videosphere src="#city"></a-videosphere>
     </a-scene>
   </body>
 </html>

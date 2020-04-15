@@ -46,6 +46,7 @@ function setup(){
   canvas = createCanvas(windowWidth, windowHeight);
   canvas.style("z-index", "-1");
   canvas.background(sceneArray[sceneIndex]);
+  spaceMusic.loop();
 }
 
 function draw(){
@@ -99,7 +100,7 @@ function intro(){
 
 //    musLooped = true;
 //  }
-  spaceMusic.loop();
+
 
   if(changeText == 0){
     textSize(30);

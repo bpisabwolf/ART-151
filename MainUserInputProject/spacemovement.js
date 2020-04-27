@@ -2,24 +2,16 @@
 //For ART 151
 //Game simulates Oregon Trail but in space with interactions with
 //different alien races
-
-//variables for images
-  let sceneNum=0;
-  let starArray = [];
-  let spaceMusic;
-  let textMoveButton;
-  let pressedContinue;
-  let changeText = 0;
-  let hyperSpaceReady = false;
-  let plutoMenu;
-  let choice;
-  let aggressive = false;
-  let practical = false;
-  let friendly = false;
-  let eMenu;
-  let musLooped = false;
-
+let label = "...waiting";
+let modelText = "model.json";
+let atBase = false;
+let values = [0, 0, 0];
+let money = 12000;
+let timer = 20;
 function preload(){
+  classifier = ml5.imageClassifier('https://teachablemachine.withgoogle.com/models/LYmOsF6QG/' + modelText);
+
+  spaceFont = loadFont('txt/CasanovaScotia-Xm0K.ttf');
   spaceMusic = loadSound("audio/spacealt1.mp3");
   sceneArray.push(loadImage("images/8bitSpace0.png"));
   sceneArray.push(loadImage("images/8bit_earth1.png"));
@@ -31,7 +23,10 @@ function preload(){
 //  sceneArray.push(loadImage("images/8bit_spaceCorp.png"));
 
 
-  ship = loadImage("images/bitShip1.png");
+  ship = loadImage("images/ship2.png");
+
+  comfirmButton = createButton("Comfirm Option");
+  comfirmButton.mousePressed(toggleComfirm);
 
 
   hyperspaceButton = createButton("Jump to FTL");
@@ -43,13 +38,46 @@ function preload(){
 }
 
 function setup(){
+
   canvas = createCanvas(windowWidth, windowHeight);
+
+  capture = createCapture(VIDEO);
+  capture.size(w, h);
+  capture.hide();
   canvas.style("z-index", "-1");
   canvas.background(sceneArray[sceneIndex]);
   spaceMusic.loop();
+
+  //flip the video feed
+  flippedVideo = ml5.flipImage(capture);
+
+ //run the classify video functioncap
+  classifyVideo();
+}
+
+function classifyVideo(){
+  flippedVideo = ml5.flipImage(capture);
+  //what are we going to classify? The video. When that is ready call the
+  //gotResults function to update the label
+  classifier.classify(flippedVideo, gotResults);
+}
+
+
+function gotResults(error, results){
+  if(error){
+    console.log(error);
+    return
+  }
+  //label is the first in the array, which is the most likely label
+  label = results[0].label;
+  //after we get the new label,
+  //we call classifyVideo again to analyze the video and update the label
+  classifyVideo();
+  console.log(results);
 }
 
 function draw(){
+
   if(inHyperspace == true && hyperSpaceReady == true){
   //  let someStar = new SpaceStar(100, 100, )
     canvas.background(9,9,9);
@@ -83,6 +111,7 @@ function shortEnding(){
   if(changeText == 0){
     eMenu.hide();
     textSize(30);
+    textFont(spaceFont);
     text("You arrive to a newly colonized planet..", 100, 100);
     text("Alien ships nearby raise concern \n They normally avoid human contact..", 100, 200);
     text("Soon we might have to interact with the aliens, obviously enraged that \n Earthlings are colonizing so quickly...", 100, 350);
@@ -104,31 +133,36 @@ function intro(){
 
   if(changeText == 0){
     textSize(30);
-    text("In the year 2134, 30 years after humanity's first venture beyond the Solar System...", 100, 100);
-    text("The development and mass production of hyperspace has allowed many upstanding \ncivilians to venture into the new universe", 100, 200);
+    textFont(spaceFont);
+    text("In the year 2134, 30 years after humanity's first venture \nbeyond the Solar System...", 100, 100);
+    text("The development and mass production of hyperspace \nhas allowed many upstanding \ncivilians to venture into the new universe", 100, 200);
     fill(255);
   }
   else if(changeText == 1){
     textSize(30);
+    textFont(spaceFont);
     text("But.. what was thought to be a new age of exploration...", 100, 100);
-    text("turned into various global corporations quickly claiming regions of space for themselves...", 100, 200);
+    text("turned into various global corporations\n quickly claiming regions of space for themselves...", 100, 200);
     fill(255);
   }
   else if(changeText == 2){
     textSize(30);
-    text("Despite this, many common folk have siezed the opportunity to venture out to the unexplored galaxy...", 100, 100);
-    text("Many troubles await ahead... natural dangers, new alien species, and even our\n fellow man making sure their property is protected....", 100, 200);
+    textFont(spaceFont);
+    text("Despite this, many common folk have siezed the opportunity \nto venture out to the unexplored galaxy...", 100, 100);
+    text("Many troubles await ahead... \nnatural dangers, new alien species, and even our\n fellow man making sure their property is protected....", 100, 200);
     fill(255);
   }
   else if(changeText == 3){
     textSize(30);
-    text("You and 3 others are aboard your new ship, which cost your entire life savings... The Resilience", 100, 100);
-    text("You head for the Pluto Depot to stock up before you begin your journey to \nsettle somewhere anew in the galaxy", 100, 200);
+    textFont(spaceFont);
+    text("You and 3 others are aboard your new ship, \nwhich cost your entire life savings... The Resilience", 100, 100);
+    text("You head for the Pluto Depot \nto stock up before you begin your journey to \nsettle somewhere anew in the galaxy", 100, 200);
     fill(255);
   }
   else if(changeText == 4){
     textSize(50);
-    text("Welcome to... the Milky Way Trail", 400, 300);
+    textFont(spaceFont);
+    text("Welcome to... the Nebula Trail", 300, 300);
     fill(255);
   }
   else{
@@ -138,11 +172,11 @@ function intro(){
 }
 
 function leavingEarth(){
-  spaceMusic.loop();
   canvas.background(sceneArray[sceneIndex]);
   image(ship, 200, 200, 50, 50);
   if(changeText == 0){
     textSize(30);
+    textFont(spaceFont);
     text("Your ship is a simple one... but enough supplies\n for a few lightyears of travel", 100, 100);
     fill(255);
   }
@@ -152,44 +186,79 @@ function leavingEarth(){
 
 }
 function startPluto(){
-  spaceMusic.loop();
+
   var menuMade = false;
   canvas.background(sceneArray[sceneIndex]);
   image(ship, 50, 300, 50, 50);
   if(changeText == 0){
     textSize(30);
-    text("Here at the Pluto Depot, you can stock up before your journey...", 100, 100);
+    textFont(spaceFont);
+    text("Here at the Pluto Depot, \nyou can stock up before your journey...", 100, 100);
     fill(255);
-    if(!plutoMenu){
-      plutoMenu = createSelect();
-      plutoMenu.style("z-index", "1");
-      plutoMenu.position(windowWidth/2, 200);
-      plutoMenu.option("Buy mostly food and supples...");
-      plutoMenu.option("Buy arms and defense mods....");
-      plutoMenu.option("Buy spare parts for the ship....");
-    }
-
-
   }
   else if(changeText == 1){
+    capture.show();
+    textSize(20);
+    textFont(spaceFont);
+    text("IMPORTANT DIRECTIONS!", 100, 100);
+    text("Use the webcam interface to select: \nright arm over head is option 1", 100, 150);
+    text("\nright arm bent next to head is option 2\n,left arm bent next to head is option 4\n", 100, 200)
+    text("right arm bent next to head is option 4\n,otherwise, neutral (no selection)\n", 100, 250);
+    fill(255);
+
+
+
+  }
+  else if(changeText == 2){
     textSize(30);
-    text("Select from the menu... click continue when done", 100, 100);
+    textFont(spaceFont);
+    text("Select from the menu using signals,\nYou have 20 seconds to select", 100, 100);
     fill(255);
 
   }
+  else if(changeText == 3){
+    atBase = true;
+    textSize(30);
+    text("Option1: Buy mostly food and supples...",windowWidth/2, windowHeight/2 -50 );
+    text("Option2: Buy arms and defense mods....",windowWidth/2, windowHeight/2);
+    text("Option3: Buy spare parts for the ship....", windowWidth/2, windowHeight/2 + 50);
+    text("Option4: Done", windowWidth/2, windowHeight/2 + 100)
+
+    text("Currently selected: " + label,windowWidth/2, windowHeight/2 + 200 );
+
+    aTimer();
+    fill(255);
+  }
   else{
-    choice = plutoMenu.value();
-    if(choice == 'Buy mostly food and supples...'){
-      friendly = true;
-    }
-    else if(choice == "Buy arms and defense mods...."){
-      aggressive = true;
-    }
-    else if(choice == "Buy spare parts for the ship...."){
-      practical = true;
-    }
+
     changeScene();
   }
+}
+
+function changeWebCam(){
+  if(showCam == true && currentlyShowing != true){
+    capture.show();
+    currentlyShowing = true;
+  }
+  else{
+    showCam = false;
+    capture.hide();
+    currentlyShowing = false;
+
+  }
+}
+function buyingSupplies(){
+  canvas.background(sceneArray[sceneIndex]);
+
+
+}
+
+function buyingArms(){
+  canvas.background(sceneArray[sceneIndex]);
+}
+
+function buyingParts(){
+  canvas.background(sceneArray[sceneIndex]);
 }
 
 
@@ -326,11 +395,16 @@ function keyTyped(){
   }
 }
 
+function toggleComfirm(){
+
+}
+
+
 
 function toggleHyperspace(){
   if(hyperSpaceReady == false){
     textSize(40);
-    text("ERROR: Engines Not Prepped for Hyperspace...")
+    text("ERROR: Engines Not Prepped for Hyperspace...");
     fill(255);
   }
   else if(hyperSpaceReady == true && inHyperspace == false){
@@ -352,4 +426,27 @@ function changeScene(){
   sceneNum++;
   sceneIndex++;
   changeText = 0;
+}
+
+function aTimer(){
+  if (frameCount % 60 == 0 && timer > 0) { // if the frameCount is divisible by 60, then a second has passed. it will stop at 0
+    timer --;
+  }
+  if (timer == 0) {
+    text("Comfirmed!", windowWidth/2, windowHeight - 50);
+    if(atBase == true){
+      if(label == "Op1" ){
+        buyingSupplies();
+      }
+      else if(label == "Op2"){
+        buyingArms();
+      }
+      else if(label == "Op3"){
+        buyingParts();
+      }
+      else if(label == "neutral"){
+        text("Not buying anything? A bit risky but ok");
+      }
+    }
+  }
 }

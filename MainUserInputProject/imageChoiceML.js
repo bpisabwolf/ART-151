@@ -6,17 +6,9 @@ let flippedVideo;
 let label = "...waiting";
 let modelText = "model.json";
 
-function preload(){
-  //add a link to your own trained model
-  classifier = ml5.imageClassifier('https://teachablemachine.withgoogle.com/models/LYmOsF6QG/' + modelText);
-}
-
-function setup() {
- canvas = createCanvas(windowWidth, windowHeight);
-
- //create the video
- video = createCapture(VIDEO);
- video.size();
+function imageChoiceMLSetUp(){
+video = createCapture(VIDEO);
+ video.size(640, 480);
  video.hide();
 
  //flip the video feed
@@ -24,11 +16,10 @@ function setup() {
 
 //run the classify video function
  classifyVideo();
-
 }
 
 function classifyVideo(){
-  flippedVideo = ml5.flipImage(capture);
+  flippedVideo = ml5.flipImage(video);
   //what are we going to classify? The video. When that is ready call the
   //gotResults function to update the label
   classifier.classify(flippedVideo, gotResults);
@@ -38,7 +29,7 @@ function classifyVideo(){
 function gotResults(error, results){
   if(error){
     console.log(error);
-    return
+    return;
   }
   //label is the first in the array, which is the most likely label
   label = results[0].label;
